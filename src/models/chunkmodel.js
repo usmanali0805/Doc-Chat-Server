@@ -1,13 +1,24 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 
 const chunkSchema = new mongoose.Schema({
-    documentId : ObjectId(documentId),
-    content : String ,
-    embedding : [Number] ,
+    documentId :{
+        type:mongoose.Schema.Types.ObjectId,
+        ref : "Document",
+        reguired: true
+    },
+    content : {
+        type :String,
+        required:true
+    },
+    embedding :{
+        type: Number ,
+        required :true
+    } 
+     ,
     pageNumber : Number ,
     ChunkIndex : Number
 })
 
-const Chunk = model.model('ChunkSchema' , chunkSchema)
+const Chunk = mongoose.model('Chunk' , chunkSchema)
 
 export default Chunk

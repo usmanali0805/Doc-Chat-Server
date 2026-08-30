@@ -1,9 +1,28 @@
 import mongoose from "mongoose";
 
 const DocumentSchema = new mongoose.Schema({
-    userId: ObjectId(userId),
-    filename: String,
-    totalpages: Number,
-    status: "processing" || "ready" || "failed",
-    createdAt: new Date()
-})
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+    filename: {
+        type: String,
+        required: true
+    },
+    totalpages: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ["processing" , "ready" , "failed"],
+        default: "processing",
+    },
+},
+    { timestamps: true }
+)
+
+const Document = mongoose.model("Document", documentSchema);
+
+export default Document;
