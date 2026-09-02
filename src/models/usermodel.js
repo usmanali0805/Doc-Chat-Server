@@ -12,7 +12,8 @@ const user = new mongoose.Schema({
     },
     password : {
         type :String,
-        required :true
+        required :true,
+        select :false
     },
     plan : {
         type : String ,

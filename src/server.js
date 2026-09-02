@@ -1,3 +1,5 @@
+import dns from 'dns'
+dns.setServers(['1.1.1.1' , '8.8.8.8'])
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
@@ -5,7 +7,11 @@ import authroute from './routes/authRoutes.js'
 import cookieParser from 'cookie-parser'
 import chatRoutes from './routes/chatRoutes.js'
 import documentRoutes from './routes/documentRoutes.js'
+import connectDB from './config/ConnectDB.js'
+
 dotenv.config()
+
+connectDB()
 
 const app = express()
 
