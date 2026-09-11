@@ -102,9 +102,7 @@ const DeleteController = async (req, res) => {
     try {
         const { email, password } = req.body
         const authheader = req.headers.authorization
-        const token = authheader.split(" ")[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        const user = await User.findByIdAndDelete(decoded.id)
+        const user = await User.findByIdAndDelete(req.userId)
         
         if (!user) {
             return res.status(404).json({
@@ -129,10 +127,8 @@ const UpdateController = async (req, res) => {
    try {
         const { email, password , name } = req.body
         const authheader = req.headers.authorization
-        const token = authheader.split(" ")[1];
         bcrypt.hash(password, 12,async function(err, hash) {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-            const user = await User.findByIdAndUpdate(decoded.id ,{
+            const user = await User.findByIdAndUpdate(req.userId ,{
                 "name" : name,
                 "email" : email,
                 "password" : hash,   
@@ -143,13 +139,12 @@ const UpdateController = async (req, res) => {
                     message: "User not found"
                 })
             }
+            return res.status(200).json({
+                status: true,
+                message: "User Updated successfully "
+            })
         });
         
-
-        return res.status(200).json({
-            status: true,
-            message: "User Updated successfully "
-        })
     } catch (error) {
         return res.status(401).json({
             status: false,
