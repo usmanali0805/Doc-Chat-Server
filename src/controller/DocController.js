@@ -1,25 +1,32 @@
-function GetAllDocument (req ,res){
- const {documentId , userId , content , embedding , pageNumber , ChunkIndex } = req.body
-    
+import { ExtractTextFromPDF } from "../services/pdfService.js"
+
+function GetAllDocument(req, res) {
+    const { documentId, userId, content, embedding, pageNumber, ChunkIndex } = req.body
+
 }
 
-function UploadDocument(req , res){
+async function UploadDocument(req, res) {
+    const filepath = req.file.path
+    
+    const result = await ExtractTextFromPDF(filepath, res)
+
     return res.status(200).json({
-        data: req.file
+        data: result
+
     })
 }
 
-function GetSingleDocument(req , res){
+function GetSingleDocument(req, res) {
 
 }
 
-function GetDocumentStatus(req , res){
+function GetDocumentStatus(req, res) {
 
 }
 
-function DeleteDocument(req , res){
+function DeleteDocument(req, res) {
 
 }
 
 
-export {GetAllDocument , UploadDocument , GetDocumentStatus , GetSingleDocument , DeleteDocument}
+export { GetAllDocument, UploadDocument, GetDocumentStatus, GetSingleDocument, DeleteDocument }
