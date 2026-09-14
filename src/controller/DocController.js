@@ -1,3 +1,4 @@
+import chunkPages from "../services/chunkService.js"
 import { ExtractTextFromPDF } from "../services/pdfService.js"
 
 function GetAllDocument(req, res) {
@@ -7,8 +8,14 @@ function GetAllDocument(req, res) {
 
 async function UploadDocument(req, res) {
     const filepath = req.file.path
-    
+
     const result = await ExtractTextFromPDF(filepath, res)
+
+    const chunks = chunkPages(result.data || result);   // jo bhi actual return shape hai
+
+    console.log(`Total chunks created: ${chunks.length}`);
+    console.log(chunks[0]);
+    console.log(chunks[1]);
 
     return res.status(200).json({
         data: result
