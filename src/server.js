@@ -27,11 +27,14 @@ app.use('/api/v1/chat', chatRoutes)
 
 
 // error handler
-app.use((err , _req , res , next)=>{
-    console.log(`[Error] ${err.message}`);
-    res.status(500).json({error :err.message})
-})
+// error handler
+app.use((err, req, res, next) => {
+    console.error("[Error]:", err.message);
+    console.error(err.stack);              // ← poora stack trace, file+line ke sath
+    console.error("Path:", req.originalUrl);
+    res.status(500).json({ error: err.message });
+});
 
-app.listen(process.env.PORT || PORT , ()=>{
+app.listen(process.env.PORT || 8000 , ()=>{
     console.log(`Server is running on port no ${process.env.PORT}`);
 })

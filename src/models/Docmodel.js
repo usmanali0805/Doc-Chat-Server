@@ -12,7 +12,7 @@ const DocumentSchema = new mongoose.Schema({
     },
     totalpages: {
         type: Number,
-        required: true
+        default :0
     },
     status: {
         type: String,

@@ -1,3 +1,4 @@
+import Chunk from "../models/chunkmodel.js"
 import Document from "../models/Docmodel.js"
 import chunkPages from "../services/chunkService.js"
 import { embedChunks } from "../services/embeddingService.js"
@@ -14,7 +15,7 @@ async function UploadDocument(req, res) {
     const doc =  await Document.create({
         userId : req.userId,
         filename : req.file.filename,
-        status : "Processing"
+        status : "processing"
     })
 
     const result = await ExtractTextFromPDF(filepath, res)
@@ -22,6 +23,17 @@ async function UploadDocument(req, res) {
     const chunks = chunkPages(result.data || result);   // jo bhi actual return shape hai
 
     const embeddedChunks = await embedChunks(chunks)
+    
+    const chunkDocs = embedChunks.map((c)=>({
+        documentId : doc._id,
+        content : c.content,
+        embedding : c.embedding,
+        pageNumber : c.pageNumber,
+        ChunkIndex : c.chunkIndex
+
+    }))
+
+    await Chunk.insertMany(chunkDocs)
 
     console.log(`Total chunks created: ${chunks.length}`);
     console.log(chunks[0]);

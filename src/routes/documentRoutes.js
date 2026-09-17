@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { DeleteDocument, GetAllDocument, GetDocumentStatus, GetSingleDocument, UploadDocument } from "../controller/DocController.js";
 import multer from "multer";
+import authMiddleware from "../middleware/authMiddleware.js";
 const documentRoutes = Router()
 
 
@@ -34,7 +35,7 @@ const upload = multer({
 });
 
 documentRoutes.get('/', GetAllDocument)
-documentRoutes.post('/upload', upload.single('document'), UploadDocument)
+documentRoutes.post('/upload',authMiddleware, upload.single('document'), UploadDocument)
 documentRoutes.get('/:id', GetSingleDocument)
 documentRoutes.get('/:id/status', GetDocumentStatus)
 documentRoutes.delete('/:id', DeleteDocument)

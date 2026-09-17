@@ -4,12 +4,11 @@ import authMiddleware from "../middleware/authMiddleware.js";
 
 const authroute = Router()
 
-authroute.use(authMiddleware)
 
 authroute.post('/login', LoginController)
 authroute.post('/signup', SignupController)
-authroute.put('/update', UpdateController)
-authroute.delete('/delete', DeleteController)
+authroute.put('/update',authMiddleware, UpdateController)
+authroute.delete('/delete',authMiddleware, DeleteController)
 
 
 export default authroute
