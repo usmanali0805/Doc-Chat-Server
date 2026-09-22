@@ -24,7 +24,7 @@ async function UploadDocument(req, res) {
 
     const embeddedChunks = await embedChunks(chunks)
     
-    const chunkDocs = embedChunks.map((c)=>({
+    const chunkDocs = embeddedChunks.map((c)=>({
         documentId : doc._id,
         content : c.content,
         embedding : c.embedding,
