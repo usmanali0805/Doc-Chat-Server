@@ -1,5 +1,5 @@
 import { searchRelevantChunks, generateAnswer } from "../services/ragService.js";
-import Chat from "../models/Chat.js";
+import Chat from "../models/chatmodel.js";
 
 // POST /:documentid — question poocho, answer milega
 export async function UploadDocumentChat(req, res) {

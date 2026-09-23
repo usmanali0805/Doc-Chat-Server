@@ -1,6 +1,6 @@
 // backend/src/services/ragService.js
 import genAI from "../config/gemini.js";
-import Chunk from "../models/Chunk.js";
+import Chunk from "../models/chunkmodel.js";
 import { embedText } from "./embeddingService.js";
 
 export async function searchRelevantChunks(documentId, question, topK = 5) {
