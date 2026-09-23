@@ -45,7 +45,7 @@ Question: ${question}
 Answer clearly and cite which page(s) you used.`;
 
     const result = await genAI.models.generateContent({
-        model: "gemini-2.5-flash",   // chat/text generation ke liye alag model
+        model: "gemini-3.6-flash",   // chat/text generation ke liye alag model
         contents: prompt,
     });
 
