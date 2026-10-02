@@ -3,6 +3,7 @@ import Chat from "../models/chatmodel.js";
 
 // POST /:documentid — question poocho, answer milega
 export async function UploadDocumentChat(req, res) {
+    console.log(req)
     try {
         const { documentid } = req.params;
         const { question } = req.body;

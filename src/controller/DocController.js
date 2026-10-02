@@ -36,10 +36,9 @@ async function UploadDocument(req, res) {
     await Chunk.insertMany(chunkDocs)
 
     console.log(`Total chunks created: ${chunks.length}`);
-    console.log(chunks[0]);
-    console.log(chunks[1]);
 
     return res.status(200).json({
+        documentId:doc._id,
         data: result
 
     })
