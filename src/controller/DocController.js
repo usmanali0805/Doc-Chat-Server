@@ -21,6 +21,8 @@ async function GetAllDocument(req, res) {
             data: formatted
         })
     } catch (error) {
+        console.error("GetAllDocument error:", error);
+        res.status(500).json({ status: false, message: "Failed to fetch documents" });
 
     }
 }
@@ -40,24 +42,39 @@ async function UploadDocument(req, res) {
 
     const embeddedChunks = await embedChunks(chunks)
 
+    console.log(embeddedChunks)
     const chunkDocs = embeddedChunks.map((c) => ({
         documentId: doc._id,
         content: c.content,
         embedding: c.embedding,
         pageNumber: c.pageNumber,
-        ChunkIndex: c.chunkIndex
+        ChunkIndex: c.ChunkIndex
 
     }))
 
     await Chunk.insertMany(chunkDocs)
+const totalPages = result.length;
+    doc.status = "ready";
+    doc.totalpages = totalPages;
+    await doc.save();
+    console.log("Saved doc:", doc);
+    console.log("Result shape:", JSON.stringify(result).slice(0, 300));
 
-    console.log(`Total chunks created: ${chunks.length}`);
+    console.log(totalPages);
 
     return res.status(200).json({
-        documentId: doc._id,
-        data: result
+      documentId: doc._id,
+      filename: doc.filename,
+      totalpages: doc.totalpages,
+      totalChunks: chunks.length,
+      status: doc.status,
+    });
 
-    })
+    // return res.status(200).json({
+    //     documentId: doc._id,
+    //     data: result
+
+    // })
 }
 
 function GetSingleDocument(req, res) {
