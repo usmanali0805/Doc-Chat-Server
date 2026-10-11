@@ -37,6 +37,6 @@ documentRoutes.get('/',authMiddleware, GetAllDocument)
 documentRoutes.post('/upload',authMiddleware, upload.single('document'), UploadDocument)
 documentRoutes.get('/:id', GetSingleDocument)
 documentRoutes.get('/:id/status', GetDocumentStatus)
-documentRoutes.delete('/:id', DeleteDocument)
+documentRoutes.delete('/:id',authMiddleware, DeleteDocument)
 
 export default documentRoutes

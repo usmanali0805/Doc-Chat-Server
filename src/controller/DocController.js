@@ -70,11 +70,7 @@ const totalPages = result.length;
       status: doc.status,
     });
 
-    // return res.status(200).json({
-    //     documentId: doc._id,
-    //     data: result
-
-    // })
+   
 }
 
 function GetSingleDocument(req, res) {
@@ -85,7 +81,23 @@ function GetDocumentStatus(req, res) {
 
 }
 
-function DeleteDocument(req, res) {
+async function DeleteDocument(req, res) {
+    try {
+        const id = req.params.id;
+        const data = await Document.findByIdAndDelete(id)
+        console.log(data)
+        res.status(200).json({
+            status : true,
+            message : "Document deleted successfully"
+        })
+        
+    } catch (error) {
+        res.status(400).json({
+            status : false, 
+            message: error.message
+        })
+        
+    }
 
 }
 
