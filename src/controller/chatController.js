@@ -1,12 +1,23 @@
 import { searchRelevantChunks, generateAnswer } from "../services/ragService.js";
 import Chat from "../models/chatmodel.js";
+import mongoose from "mongoose";
+import Document from "../models/Docmodel.js";
 
 // POST /:documentid — question poocho, answer milega
 export async function UploadDocumentChat(req, res) {
-    console.log(req)
     try {
         const { documentid } = req.params;
         const { question } = req.body;
+
+        if (!mongoose.isValidObjectId(documentid)) {
+            return res.status(400).json({ status: false, message: "Invalid document id" });
+        }
+
+        const doc = await Document.findOne({ _id: documentid, userId: req.userId });
+        if (!doc) {
+            return res.status(404).json({ status: false, message: "Document not found" });
+        }
+
 
         if (!question) {
             return res.status(400).json({ message: "question is required" });
@@ -38,6 +49,14 @@ export async function DocumentHistory(req, res) {
     try {
         const { documentid } = req.params;
 
+        if (!mongoose.isValidObjectId(documentid)) {
+            return res.status(400).json({ status: false, message: "Invalid document id" });
+        }
+
+        const doc = await Document.findOne({ _id: documentid, userId: req.userId });
+        if (!doc) {
+            return res.status(404).json({ status: false, message: "Document not found" });
+        }
         const chat = await Chat.findOne({ documentId: documentid, userId: req.userId });
 
         if (!chat) {

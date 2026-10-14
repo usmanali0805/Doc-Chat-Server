@@ -1,8 +1,10 @@
+import mongoose from "mongoose"
 import Chunk from "../models/chunkmodel.js"
 import Document from "../models/Docmodel.js"
 import chunkPages from "../services/chunkService.js"
 import { embedChunks } from "../services/embeddingService.js"
 import { ExtractTextFromPDF } from "../services/pdfService.js"
+import Chat from "../models/chatmodel.js"
 
 async function GetAllDocument(req, res) {
     try {
@@ -57,10 +59,10 @@ const totalPages = result.length;
     doc.status = "ready";
     doc.totalpages = totalPages;
     await doc.save();
-    console.log("Saved doc:", doc);
-    console.log("Result shape:", JSON.stringify(result).slice(0, 300));
+    // console.log("Saved doc:", doc);
+    // console.log("Result shape:", JSON.stringify(result).slice(0, 300));
 
-    console.log(totalPages);
+    // console.log(totalPages);
 
     return res.status(200).json({
       documentId: doc._id,
@@ -69,8 +71,6 @@ const totalPages = result.length;
       totalChunks: chunks.length,
       status: doc.status,
     });
-
-   
 }
 
 function GetSingleDocument(req, res) {
@@ -82,23 +82,29 @@ function GetDocumentStatus(req, res) {
 }
 
 async function DeleteDocument(req, res) {
-    try {
-        const id = req.params.id;
-        const data = await Document.findByIdAndDelete(id)
-        console.log(data)
-        res.status(200).json({
-            status : true,
-            message : "Document deleted successfully"
-        })
-        
-    } catch (error) {
-        res.status(400).json({
-            status : false, 
-            message: error.message
-        })
-        
+  try {
+    const id = req.params.id;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ status: false, message: "Invalid document id" });
     }
 
+    const doc = await Document.findOneAndDelete({ _id: id, userId: req.userId });
+
+    if (!doc) {
+      return res.status(404).json({ status: false, message: "Document not found" });
+    }
+
+    await Promise.all([
+      Chunk.deleteMany({ documentId: doc._id }),
+      Chat.deleteMany({ documentId: doc._id }),
+    ]);
+
+    res.status(200).json({ status: true, message: "Document deleted successfully" });
+  } catch (error) {
+    console.error("DeleteDocument error:", error);
+    res.status(500).json({ status: false, message: "Failed to delete document" });
+  }
 }
 
 
