@@ -3,11 +3,14 @@ import Chat from "../models/chatmodel.js";
 import mongoose from "mongoose";
 import Document from "../models/Docmodel.js";
 
-// POST /:documentid — question poocho, answer milega
 export async function UploadDocumentChat(req, res) {
     try {
         const { documentid } = req.params;
         const { question } = req.body;
+        
+        if (!question) {
+            return res.status(400).json({ message: "question is required" });
+        }
 
         if (!mongoose.isValidObjectId(documentid)) {
             return res.status(400).json({ status: false, message: "Invalid document id" });
@@ -18,10 +21,6 @@ export async function UploadDocumentChat(req, res) {
             return res.status(404).json({ status: false, message: "Document not found" });
         }
 
-
-        if (!question) {
-            return res.status(400).json({ message: "question is required" });
-        }
 
         const chunks = await searchRelevantChunks(documentid, question);
         const answer = await generateAnswer(question, chunks);
@@ -44,7 +43,6 @@ export async function UploadDocumentChat(req, res) {
     }
 }
 
-// GET /:documentid/history — poori chat history dikhao
 export async function DocumentHistory(req, res) {
     try {
         const { documentid } = req.params;
@@ -64,25 +62,6 @@ export async function DocumentHistory(req, res) {
         }
 
         return res.status(200).json({ messages: chat.messages });
-
-    } catch (err) {
-        console.error(err.stack);
-        return res.status(500).json({ error: err.message });
-    }
-}
-
-// DELETE /:documentid — chat history delete karo
-export async function DeleteDocument(req, res) {
-    try {
-        const { documentid } = req.params;
-
-        const deleted = await Chat.findOneAndDelete({ documentId: documentid, userId: req.userId });
-
-        if (!deleted) {
-            return res.status(404).json({ message: "Chat not found" });
-        }
-
-        return res.status(200).json({ message: "Chat deleted successfully" });
 
     } catch (err) {
         console.error(err.stack);

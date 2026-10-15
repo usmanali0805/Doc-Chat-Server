@@ -29,9 +29,10 @@ const upload = multer({
     fileFilter,
     storage,
     limits: {
-        fileSize: 1 * 1024 * 1024
+        fileSize: 10 * 1024 * 1024
     }
 });
+
 
 documentRoutes.get('/',authMiddleware, GetAllDocument)
 documentRoutes.post('/upload',authMiddleware, upload.single('document'), UploadDocument)

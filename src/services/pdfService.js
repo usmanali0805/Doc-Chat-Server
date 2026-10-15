@@ -35,7 +35,6 @@ function splitIntoPages(fullText) {
         lastIndex = pageMarkerRegex.lastIndex;
     }
 
-    // Agar marker ke baad bhi kuch text bacha ho (last page jiska marker na ho)
     const remaining = fullText.slice(lastIndex).trim();
     if (remaining) {
         pages.push({

@@ -1,5 +1,5 @@
 
-import mongoose from "mongoose";   // ← yeh import add karo
+import mongoose from "mongoose";   
 import genAI from "../config/gemini.js";
 import Chunk from "../models/chunkmodel.js";
 import { embedText } from "./embeddingService.js";
@@ -15,7 +15,7 @@ export async function searchRelevantChunks(documentId, question, topK = 5) {
                 queryVector: questionEmbedding,
                 numCandidates: 100,
                 limit: topK,
-                filter: { documentId: new mongoose.Types.ObjectId(documentId) },   // ← yeh fix
+                filter: { documentId: new mongoose.Types.ObjectId(documentId) },   
             },
         },
         {

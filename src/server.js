@@ -27,10 +27,9 @@ app.use('/api/v1/chat', chatRoutes)
 
 
 // error handler
-// error handler
 app.use((err, req, res, next) => {
     console.error("[Error]:", err.message);
-    console.error(err.stack);              // ← poora stack trace, file+line ke sath
+    console.error(err.stack);             
     console.error("Path:", req.originalUrl);
     res.status(500).json({ error: err.message });
 });

@@ -11,12 +11,12 @@ const chatSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    messages: [                          // ← "messages" (PLURAL) aur array [ ] ke andar
+    messages: [                         
         {
             role: {
                 type: String,
                 required: true,
-                enum: ["user", "assistant"],   // lowercase
+                enum: ["user", "assistant"],   
             },
             text: {
                 type: String,

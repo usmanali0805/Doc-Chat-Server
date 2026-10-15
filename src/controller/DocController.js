@@ -40,7 +40,7 @@ async function UploadDocument(req, res) {
 
     const result = await ExtractTextFromPDF(filepath, res)
 
-    const chunks = chunkPages(result.data || result);   // jo bhi actual return shape hai
+    const chunks = chunkPages(result.data || result);   
 
     const embeddedChunks = await embedChunks(chunks)
 
@@ -59,10 +59,7 @@ const totalPages = result.length;
     doc.status = "ready";
     doc.totalpages = totalPages;
     await doc.save();
-    // console.log("Saved doc:", doc);
-    // console.log("Result shape:", JSON.stringify(result).slice(0, 300));
-
-    // console.log(totalPages);
+ 
 
     return res.status(200).json({
       documentId: doc._id,
