@@ -72,23 +72,25 @@ export async function DocumentHistory(req, res) {
 export async function UploadDocumentChatStream(req, res) {
     try {
         const { documentid } = req.params;
+        console.log(documentid)
         const { question } = req.body;
-
+        
         if (!question) {
             return res.status(400).json({ message: "question is required" });
         }
-
+        
         if (!mongoose.isValidObjectId(documentid)) {
             return res.status(400).json({ status: false, message: "Invalid document id" });
         }
-
+        
         const doc = await Document.findOne({ _id: documentid, userId: req.userId });
         if (!doc) {
             return res.status(404).json({ status: false, message: "Document not found" });
         }
-
+        
         const chunks = await searchRelevantChunks(documentid, question);
         const answer = await generateAnswer(question, chunks);
+        const sources = [...new Set(chunks.map((c) => c.pageNumber))];
 
         res.setHeader("Content-Type", "text/event-stream");
         res.setHeader("Cache-Control", "no-cache");
